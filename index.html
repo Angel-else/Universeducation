@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniVersEducation - Cours de Renforcement</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpeg">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #1e272e; 
+            --secondary-color: #f39c12; 
+            --accent-color: #d35400; 
+            --bg-color: #f4f1ea;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* EN-TETE / NAVIGATION */
+        header {
+            background-color: var(--primary-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 120px 20px 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 5px;
+            background-color: var(--secondary-color);
+            margin: 10px auto 0 auto;
+            border-radius: 3px;
+        }
+
+        /* SECTION ACCUEIL (HERO) */
+        #accueil {
+            background: linear-gradient(rgba(30, 39, 46, 0.85), rgba(30, 39, 46, 0.85)), url('https://i.pinimg.com/1200x/61/d0/96/61d0960eb5265102815749942071bbdb.jpg') no-repeat center center/cover;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding-top: 140px;
+            max-width: 100%;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        #accueil h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        #accueil p {
+            font-size: 22px;
+            max-width: 850px;
+            margin-bottom: 40px;
+            color: #f4f1ea;
+        }
+
+        .btn-cta {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 15px 35px;
+            text-decoration: none;
+            font-weight: 800;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+            transition: transform 0.3s, background 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-cta:hover {
+            background-color: #e67e22;
+            transform: translateY(-3px);
+        }
+
+        /* SECTION OBJECTIFS & PARENTS */
+        .parents-container {
+            background-color: var(--card-bg);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--accent-color);
+            margin-bottom: 50px;
+        }
+
+        .parents-container h3 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .grid-objectifs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card-objectif {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid var(--secondary-color);
+            transition: transform 0.3s;
+        }
+
+        .card-objectif:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-objectif h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        /* SECTION INSCRIPTION (FORMULAIRE) */
+        .form-container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 45px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .form-group-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e4e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: #fdfdfd;
+            color: var(--primary-color);
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, var(--primary-color), #2c3e50);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .price-box span:first-child {
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .price-amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--secondary-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3);
+            transition: background 0.3s, transform 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background-color: #b33921;
+            transform: translateY(-2px);
+        }
+
+        #qrcode-hidden {
+            display: none;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; }
+            .form-group-row { grid-template-columns: 1fr; gap: 0; }
+            #accueil h1 { font-size: 34px; }
+            #accueil p { font-size: 18px; }
+            section { padding-top: 140px; }
+            .form-container { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <a href="#accueil" class="logo">UniVers<span>Education</span></a>
+            <ul class="nav-links">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#objectifs">Objectifs</a></li>
+                <li><a href="#inscription">Inscription</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="accueil">
+        <h1>Assurez la réussite de votre année scolaire</h1>
+        <p>Rejoignez les cours de renforcement intensifs de UniVersEducation. Une préparation d'excellence pour aborder la rentrée prochaine avec confiance et sérénité.</p>
+        <a href="#inscription" class="btn-cta">S'inscrire maintenant</a>
+    </section>
+
+    <section id="objectifs">
+        <h2 class="section-title">Objectifs & Vision</h2>
+        
+        <div class="parents-container">
+            <h3>Chers Parents d'Élèves,</h3>
+            <p>Les vacances sont une opportunité précieuse. Loin de la pression des examens immédiats, c'est le moment idéal pour combler les lacunes accumulées durant l'année et assimiler les notions clés de la classe supérieure. À <strong>UniVersEducation</strong>, nous offrons à vos enfants un cadre rigoureux, encadré par des enseignants chevronnés, pour transformer le temps libre des vacances en un tremplin de réussite académique. Investir dans ces cours, c'est garantir à votre enfant une longueur d'avance dès le premier jour de la rentrée.</p>
+        </div>
+
+        <div class="grid-objectifs">
+            <div class="card-objectif">
+                <h4>Renforcement Ciblé</h4>
+                <p>Révision approfondie des matières fondamentales pour consolider les bases.</p>
+            </div>
+            <div class="card-objectif">
+                <h4>Anticipation des Programmes</h4>
+                <p>Introduction aux premiers chapitres de la classe supérieure pour une rentrée sans stress.</p>
+            </div>
+            <div class="card-objectif">
+                <h4>Méthodologie de Travail</h4>
+                <p>Apprentissage de techniques d'organisation et de résolution d'exercices complexes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="inscription">
+        <h2 class="section-title">Formulaire d'Inscription</h2>
+        
+        <div class="form-container">
+            <form id="inscriptionForm">
+                
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="nom">Nom *</label>
+                        <input type="text" id="nom" required placeholder="Ex: Vôtre nom">
+                    </div>
+                    <div class="form-group">
+                        <label for="prenom">Prénom *</label>
+                        <input type="text" id="prenom" required placeholder="Ex: Vôtre prénom">
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="sexe">Sexe *</label>
+                        <select id="sexe" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="Masculin">Masculin</option>
+                            <option value="Féminin">Féminin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_naissance">Date de naissance *</label>
+                        <input type="date" id="date_naissance" required>
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="telephone_eleve">Téléphone Élève</label>
+                        <input type="tel" id="telephone_eleve" placeholder="Ex: 01000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone_parent">Téléphone Parent *</label>
+                        <input type="tel" id="telephone_parent" required placeholder="Ex: 01020304">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="etablissement">Établissement d'origine *</label>
+                    <input type="text" id="etablissement" required placeholder="Ex: CEG 1">
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="commune">Commune *</label>
+                        <input type="text" id="commune" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrondissement">Arrondissement *</label>
+                        <input type="text" id="arrondissement" required>
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="niveau">Niveau d'études *</label>
+                        <select id="niveau" required onchange="gererNiveauEtTarif()">
+                            <option value="">Sélectionner un niveau...</option>
+                            <option value="6eme">6ème</option>
+                            <option value="5eme">5ème</option>
+                            <option value="4eme">4ème</option>
+                            <option value="3eme">3ème</option>
+                            <option value="seconde">Seconde</option>
+                            <option value="premiere">Première</option>
+                            <option value="terminale">Terminale</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="serie">Série *</label>
+                        <select id="serie" disabled required>
+                            <option value="">Choisir le niveau d'abord...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="price-box">
+                    <span>Frais d'inscription attendus :</span>
+                    <span class="price-amount" id="affichageTarif">0 FCFA</span>
+                </div>
+
+                <button type="submit">Confirmer & Télécharger mon Reçu (PDF)</button>
+            </form>
+        </div>
+    </section>
+
+    <div id="qrcode-hidden"></div>
+
+    <script>
+        const tarifs = { "6eme": 2500, "5eme": 2500, "4eme": 4000, "3eme": 4000, "seconde": 5000, "premiere": 7000, "terminale": 7000 };
+        const seriesParNiveau = {
+            "seconde": ["A", "C", "D", "G"],
+            "premiere": ["A", "C", "D", "G1", "G2", "G3"],
+            "terminale": ["A", "C", "D", "G1", "G2", "G3"]
+        };
+
+        function gererNiveauEtTarif() {
+            const niveau = document.getElementById("niveau").value;
+            const serieSelect = document.getElementById("serie");
+            const affichageTarif = document.getElementById("affichageTarif");
+            
+            affichageTarif.textContent = tarifs[niveau] ? tarifs[niveau].toLocaleString('fr-FR') + " FCFA" : "0 FCFA";
+            serieSelect.innerHTML = "";
+
+            if (seriesParNiveau[niveau]) {
+                serieSelect.disabled = false;
+                let opt = document.createElement("option"); opt.value = ""; opt.textContent = "Choisir la série...";
+                serieSelect.appendChild(opt);
+                
+                seriesParNiveau[niveau].forEach(s => {
+                    let o = document.createElement("option"); o.value = s; o.textContent = "Série " + s;
+                    serieSelect.appendChild(o);
+                });
+            } else {
+                serieSelect.disabled = true;
+                let o = document.createElement("option"); o.value = "Aucune"; o.textContent = "Non applicable (Premier Cycle)";
+                serieSelect.appendChild(o);
+                serieSelect.value = "Aucune";
+            }
+        }
+
+        document.getElementById("inscriptionForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const donnees = {
+                numInscription: "UVE-" + Math.floor(100000 + Math.random() * 900000),
+                nom: document.getElementById("nom").value.toUpperCase(),
+                prenom: document.getElementById("prenom").value,
+                sexe: document.getElementById("sexe").value,
+                date_naissance: document.getElementById("date_naissance").value,
+                tel_eleve: document.getElementById("telephone_eleve").value || "Non fourni",
+                tel_parent: document.getElementById("telephone_parent").value,
+                etablissement: document.getElementById("etablissement").value,
+                commune: document.getElementById("commune").value,
+                arrondissement: document.getElementById("arrondissement").value,
+                niveau: document.getElementById("niveau").value,
+                serie: document.getElementById("serie").value,
+                montant: tarifs[document.getElementById("niveau").value] + " FCFA"
+            };
+
+            document.getElementById("qrcode-hidden").innerHTML = "";
+            
+            // Texte du QR code allégé pour éviter le "length overflow"
+            const qrText = `Ref: ${donnees.numInscription}\nEleve: ${donnees.nom}\nClasse: ${donnees.niveau}\nFrais: ${donnees.montant}`;
+            
+            // Paramètres QR Code renforcés
+            new QRCode(document.getElementById("qrcode-hidden"), {
+                text: qrText,
+                width: 150,
+                height: 150,
+                colorDark : "#1e272e",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H // Haute tolérance aux pannes
+            });
+
+            setTimeout(() => {
+                const qrImageTag = document.querySelector("#qrcode-hidden img");
+                const qrSrc = qrImageTag ? qrImageTag.src : null;
+                
+                // 1. On génère le PDF (Fonctionne même en local)
+                genererFichePDF(donnees, qrSrc);
+
+                // 2. On tente l'envoi vers Google Forms
+                envoyerVersGoogleForm(donnees);
+
+                alert("Inscription enregistrée ! Votre reçu PDF a été généré.");
+                document.getElementById("inscriptionForm").reset();
+                document.getElementById("affichageTarif").textContent = "0 FCFA";
+            }, 400);
+        });
+
+        function genererFichePDF(d, qrCodeSrc) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // En-tête bleu nuit du PDF
+            doc.setFillColor(30, 39, 46);
+            doc.rect(0, 0, 220, 35, 'F');
+            
+            // Bandeau safran sous l'en-tête
+            doc.setFillColor(243, 156, 18);
+            doc.rect(0, 35, 220, 3, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont("helvetica", "bold");
+            doc.text("UNIVERS EDUCATION", 20, 23);
+
+            doc.setTextColor(80, 80, 80);
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Date : ${new Date().toLocaleDateString('fr-FR')}`, 150, 48);
+
+            doc.setTextColor(30, 39, 46);
+            doc.setFontSize(15);
+            doc.setFont("helvetica", "bold");
+            doc.text(`FICHE REÇU UNIQUE : ${d.numInscription}`, 20, 58);
+            doc.line(20, 62, 190, 62);
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Élève : ${d.nom} ${d.prenom}`, 20, 75);
+            doc.text(`Sexe : ${d.sexe}`, 20, 85);
+            doc.text(`Né(e) le : ${d.date_naissance}`, 20, 95);
+            doc.text(`Provenance : ${d.etablissement}`, 20, 105);
+            doc.text(`Zone : ${d.commune} / Arr. : ${d.arrondissement}`, 20, 115);
+            
+            doc.setFont("helvetica", "bold");
+            doc.text(`Niveau/Classe d'étude : ${d.niveau} (Série : ${d.serie})`, 20, 130);
+            doc.text(`Contact d'urgence Parent : ${d.tel_parent}`, 20, 140);
+            
+            // Box financière
+            doc.setFillColor(244, 241, 234);
+            doc.rect(20, 150, 170, 18, 'F');
+            doc.setDrawColor(243, 156, 18);
+            doc.rect(20, 150, 170, 18, 'D');
+            doc.setTextColor(211, 84, 0);
+            doc.text(`FRAIS DE PARTICIPATION ATTENDUS : ${d.montant}`, 25, 161);
+
+            if (qrCodeSrc) {
+                // Ajustement taille QR Code dans le PDF
+                doc.addImage(qrCodeSrc, 'PNG', 20, 180, 35, 35);
+            }
+
+            doc.setTextColor(120, 120, 120);
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "italic");
+            doc.text("Présentez obligatoirement cette fiche (électronique ou imprimée) à la rentrée des cours.", 20, 240);
+
+            doc.save(`Fiche_Inscription_${d.numInscription}.pdf`);
+        }
+
+        function envoyerVersGoogleForm(d) {
+            const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfbUGsBaUu58LmXdTwk24wKWxR6YWistGuwsb7mnpEmBkv2qA/formResponse";
+            
+            const formData = new FormData();
+            formData.append("entry.267936012", d.numInscription);
+            formData.append("entry.1119122529", d.nom);
+            formData.append("entry.1128679695", d.prenom);
+            formData.append("entry.1835112247", d.niveau);
+            formData.append("entry.2062740032", d.montant);
+            formData.append("entry.1622759603", d.tel_parent);
+
+            fetch(googleFormUrl, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            }).catch(error => console.log("Note: Blocage de sécurité navigateur en local (Sans gravité pour la mise en ligne)."));
+        }
+    </script>
+</body>
+</html>
