@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniVersEducation - Cours de Renforcement</title>
     <link rel="icon" type="image/jpeg" href="logo.jpeg">
-    <!-- Balises de prévisualisation (Open Graph pour WhatsApp, Facebook, etc.) -->
-<meta property="og:title" content="UniVersEducation - Cours de Renforcement">
-<meta property="og:description" content="Assurez la réussite de votre année scolaire. Rejoignez nos cours de renforcement intensifs.">
-<meta property="og:image" content="https://universeducation.netlify.app/logo.jpeg">
-<meta property="og:url" content="https://universeducation.netlify.app">
-<meta property="og:type" content="website">
+    <meta property="og:title" content="UniVersEducation - Cours de Renforcement">
+    <meta property="og:description" content="Assurez la réussite de votre année scolaire. Rejoignez nos cours de renforcement intensifs.">
+    <meta property="og:image" content="https://universeducation.netlify.app/logo.jpeg">
+    <meta property="og:url" content="https://universeducation.netlify.app">
+    <meta property="og:type" content="website">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -23,6 +22,7 @@
             --bg-color: #f4f1ea;
             --card-bg: #ffffff;
             --text-color: #2c3e50;
+            --error-color: #ff4d4d;
         }
 
         * {
@@ -236,6 +236,7 @@
 
         .form-group {
             margin-bottom: 25px;
+            position: relative;
         }
 
         label {
@@ -262,6 +263,14 @@
         input:focus, select:focus {
             outline: none;
             border-color: var(--secondary-color);
+        }
+
+        .error-msg {
+            color: var(--error-color);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+            display: none;
         }
 
         .price-box {
@@ -352,7 +361,7 @@
         
         <div class="parents-container">
             <h3>Chers Parents d'Élèves,</h3>
-            <p>Les vacances sont une opportunité précieuse. Loin de la pression des examens immédiats, c'est le moment idéal pour combler les lacunes accumulées durant l'année et assimiler les notions clés de la classe supérieure. À <strong>UniVersEducation</strong>, nous offrons à vos enfants un cadre rigoureux, encadré par des enseignants chevronnés, pour transformer le temps libre des vacances en un tremplin de réussite académique. Investir dans ces cours, c'est garantie à votre enfant une longueur d'avance dès le premier jour de la rentrée.</p>
+            <p>Les vacances sont une opportunité précieuse. Loin de la pression des examens immédiats, c'est le moment idéal pour combler les lacunes accumulées durant l'année et assimiler les notions clés de la classe supérieure. À <strong>UniVersEducation</strong>, nous offrons à vos enfants un cadre rigoureux, encadré par des enseignants chevronnés, pour transformer le temps libre des vacances en un tremplin de réussite académique. Investir dans ces cours, c'est garantir à votre enfant une longueur d'avance dès le premier jour de la rentrée.</p>
         </div>
 
         <div class="grid-objectifs">
@@ -381,14 +390,14 @@
                     <div class="form-group">
                         <label for="nom">Nom *</label>
                         <input type="text" id="nom" required placeholder="Ex: KOFFI" 
-                               pattern="[A-Za-zA-ÿ\s\-]+" title="Le nom ne doit contenir que des lettres."
-                               oninput="this.value = this.value.replace(/[0-9]/g, '')">
+                               oninput="validerTexte(this)">
+                        <div class="error-msg">⚠️ Ce champ accepte uniquement les lettres.</div>
                     </div>
                     <div class="form-group">
                         <label for="prenom">Prénom *</label>
                         <input type="text" id="prenom" required placeholder="Ex: Jean" 
-                               pattern="[A-Za-zA-ÿ\s\-]+" title="Le prénom ne doit contenir que des lettres."
-                               oninput="this.value = this.value.replace(/[0-9]/g, '')">
+                               oninput="validerTexte(this)">
+                        <div class="error-msg">⚠️ Ce champ accepte uniquement les lettres.</div>
                     </div>
                 </div>
 
@@ -411,14 +420,14 @@
                     <div class="form-group">
                         <label for="telephone_eleve">Téléphone Élève</label>
                         <input type="tel" id="telephone_eleve" placeholder="Ex: 01020304" 
-                               pattern="[0-9]+" title="Uniquement des chiffres sans lettres ni espaces."
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                               oninput="validerChiffres(this)">
+                        <div class="error-msg">⚠️ Uniquement des chiffres sans lettres ni espaces.</div>
                     </div>
                     <div class="form-group">
                         <label for="telephone_parent">Téléphone Parent *</label>
                         <input type="tel" id="telephone_parent" required placeholder="Ex: 01020304" 
-                               pattern="[0-9]+" title="Uniquement des chiffres sans lettres ni espaces."
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                               oninput="validerChiffres(this)">
+                        <div class="error-msg">⚠️ Uniquement des chiffres sans lettres ni espaces.</div>
                     </div>
                 </div>
 
@@ -432,8 +441,8 @@
                     <div class="form-group">
                         <label for="commune">Commune *</label>
                         <input type="text" id="commune" required placeholder="Ex: Cotonou"
-                               pattern="[A-Za-zA-ÿ\s\-]+" title="La commune ne doit contenir que des lettres."
-                               oninput="this.value = this.value.replace(/[0-9]/g, '')">
+                               oninput="validerTexte(this)">
+                        <div class="error-msg">⚠️ Ce champ accepte uniquement les lettres.</div>
                     </div>
                     <div class="form-group">
                         <label for="arrondissement">Arrondissement *</label>
@@ -483,10 +492,8 @@
             "terminale": ["A", "C", "D", "G1", "G2", "G3"]
         };
 
-        // Variable globale pour stocker l'image encodée pour jsPDF
         let logoBase64 = null;
 
-        // Pré-chargement et conversion automatique du logo en Base64 au démarrage
         window.addEventListener('DOMContentLoaded', () => {
             const img = new Image();
             img.crossOrigin = 'Anonymous';
@@ -503,6 +510,27 @@
                 console.log("Note : Le logo local sera visible lors de la mise en ligne ou via un serveur local (Live Server).");
             };
         });
+
+        // Nouvelles fonctions de filtrage et d'affichage d'instructions
+        function validerTexte(input) {
+            const errorDiv = input.nextElementSibling;
+            if (/[0-9]/.test(input.value)) {
+                errorDiv.style.display = 'block';
+                input.value = input.value.replace(/[0-9]/g, '');
+            } else {
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        function validerChiffres(input) {
+            const errorDiv = input.nextElementSibling;
+            if (/[^0-9]/.test(input.value)) {
+                errorDiv.style.display = 'block';
+                input.value = input.value.replace(/[^0-9]/g, '');
+            } else {
+                errorDiv.style.display = 'none';
+            }
+        }
 
         function gererNiveauEtTarif() {
             const niveau = document.getElementById("niveau").value;
@@ -578,26 +606,19 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // En-tête bleu nuit du PDF
             doc.setFillColor(30, 39, 46);
             doc.rect(0, 0, 220, 35, 'F');
             
-            // Bandeau safran sous l'en-tête
             doc.setFillColor(243, 156, 18);
             doc.rect(0, 35, 220, 3, 'F');
             
-            // Insertion du LOGO si disponible
             if (logoBase64) {
-                // Position X: 15, Y: 6, Largeur: 22, Hauteur: 22 (Ajustable)
                 doc.addImage(logoBase64, 'JPEG', 15, 6, 22, 22);
-                
-                // On décale le texte du titre vers la droite pour laisser de la place au logo
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(24);
                 doc.setFont("helvetica", "bold");
                 doc.text("UNIVERS EDUCATION", 45, 23);
             } else {
-                // Alignement classique sans logo si l'image n'est pas encore chargée
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(24);
                 doc.setFont("helvetica", "bold");
